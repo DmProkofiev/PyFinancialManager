@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1059</width>
+    <height>750</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>FIBER Financial Manager</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Resources/FIBERFMico.png</normaloff>Resources/FIBERFMico.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="leftMargin">
+     <number>15</number>
+    </property>
+    <property name="topMargin">
+     <number>15</number>
+    </property>
+    <property name="rightMargin">
+     <number>15</number>
+    </property>
+    <property name="bottomMargin">
+     <number>15</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+       </font>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabDashboard">
+       <attribute name="title">
+        <string>Финансы</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frameBalance">
+            <property name="class" stdset="0">
+             <string>card</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QLabel" name="label_balance_title">
+               <property name="text">
+                <string>Баланс</string>
+               </property>
+               <property name="class" stdset="0">
+                <string>card-title</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_balance_value">
+               <property name="text">
+                <string>0 ₽</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frameExpenses">
+            <property name="class" stdset="0">
+             <string>card</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QLabel" name="label_expenses_title">
+               <property name="text">
+                <string>Расходы</string>
+               </property>
+               <property name="class" stdset="0">
+                <string>card-title</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_expenses_value">
+               <property name="text">
+                <string>0 ₽</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frameIncomes">
+            <property name="class" stdset="0">
+             <string>card</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QLabel" name="label_incomes_title">
+               <property name="text">
+                <string>Доходы</string>
+               </property>
+               <property name="class" stdset="0">
+                <string>card-title</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_incomes_value">
+               <property name="text">
+                <string>0 ₽</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frameObligations">
+            <property name="class" stdset="0">
+             <string>card</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QLabel" name="label_obligations_title">
+               <property name="text">
+                <string>Обязательства</string>
+               </property>
+               <property name="class" stdset="0">
+                <string>card-title</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_obligations_value">
+               <property name="text">
+                <string>0 ₽</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelStatistics">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>-1</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font-size: 16px; font-weight: bold; margin-top: 10px;</string>
+          </property>
+          <property name="text">
+           <string>Статистика по месяцам</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableMonthStatistics">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderVisible">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Месяц</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Доходы</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Расходы</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Свободный остаток</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabIncomes">
+       <attribute name="title">
+        <string>Доходы</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayoutIncome">
+          <item>
+           <widget class="QPushButton" name="btnIncomePrevMonth">
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>◀</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelIncomeCurrentMonth">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnIncomeNextMonth">
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>▶</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditIncomeAmount">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="placeholderText">
+             <string>Сумма</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditIncomeDate">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="placeholderText">
+             <string>Дата 01.01.2025</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxIncomeType">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditIncomeDesc">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="placeholderText">
+             <string>Описание</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnAddIncome">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="text">
+             <string>Добавить доход</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnDeleteIncome">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="text">
+             <string>Удалить</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableIncomes">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderVisible">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Дата</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Тип</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Сумма</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Описание</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabExpenses">
+       <attribute name="title">
+        <string>Расходы</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayoutExpense">
+          <item>
+           <widget class="QPushButton" name="btnExpensePrevMonth">
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>◀</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelExpenseCurrentMonth">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnExpenseNextMonth">
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>▶</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditExpenseAmount">
+            <property name="placeholderText">
+             <string>Сумма</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditExpenseDate">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>Дата 01.01.2025</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxExpenseType"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditExpenseDesc">
+            <property name="placeholderText">
+             <string>Описание</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnAddExpense">
+            <property name="text">
+             <string>Добавить расход</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnDeleteExpense">
+            <property name="text">
+             <string>Удалить</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableExpenses">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderVisible">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Дата</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Тип</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Сумма</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Описание</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabObligations">
+       <attribute name="title">
+        <string>Обязательства</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayoutInputObligation">
+          <item>
+           <widget class="QLineEdit" name="lineEditObligationName">
+            <property name="placeholderText">
+             <string>Название</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxObligationType"/>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditObligationAmount">
+            <property name="placeholderText">
+             <string>Сумма</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditObligationMonthlyPayment">
+            <property name="placeholderText">
+             <string>Ежемесячный платеж</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditObligationStartDate">
+            <property name="placeholderText">
+             <string>Дата начала</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditObligationDueDate">
+            <property name="placeholderText">
+             <string>Дата окончания</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditObligationPaidAmount">
+            <property name="placeholderText">
+             <string>Уплаченная сумма</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnAddObligation">
+            <property name="text">
+             <string>Добавить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnDeleteObligation">
+            <property name="text">
+             <string>Удалить</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_10"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditObligationDesc">
+          <property name="placeholderText">
+           <string>Описание</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableObligations">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderVisible">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Название</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Тип</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Сумма</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Остаток</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Срок</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
