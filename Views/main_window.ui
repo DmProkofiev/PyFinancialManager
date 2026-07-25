@@ -42,7 +42,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabDashboard">
        <attribute name="title">
@@ -335,6 +335,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="btnUpdateIncome">
+            <property name="text">
+             <string>Обновить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="btnDeleteIncome">
             <property name="font">
              <font>
@@ -466,6 +473,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="btnUpdateExpense">
+            <property name="text">
+             <string>Обновить</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="btnDeleteExpense">
             <property name="text">
              <string>Удалить</string>
@@ -561,30 +575,43 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="btnAddObligation">
-            <property name="text">
-             <string>Добавить</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnDeleteObligation">
-            <property name="text">
-             <string>Удалить</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_10"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEditObligationDesc">
-          <property name="placeholderText">
-           <string>Описание</string>
-          </property>
+         <widget class="QWidget" name="horizontalWidget" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLineEdit" name="lineEditObligationDesc">
+             <property name="placeholderText">
+              <string>Описание</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnAddObligation">
+             <property name="text">
+              <string>Добавить</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnUpdateObligation">
+             <property name="text">
+              <string>Обновить</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnDeleteObligation">
+             <property name="text">
+              <string>Удалить</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>

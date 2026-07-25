@@ -212,6 +212,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayoutIncome.addWidget(self.btnAddIncome)
 
+        self.btnUpdateIncome = QPushButton(self.tabIncomes)
+        self.btnUpdateIncome.setObjectName(u"btnUpdateIncome")
+
+        self.horizontalLayoutIncome.addWidget(self.btnUpdateIncome)
+
         self.btnDeleteIncome = QPushButton(self.tabIncomes)
         self.btnDeleteIncome.setObjectName(u"btnDeleteIncome")
         self.btnDeleteIncome.setFont(font)
@@ -290,6 +295,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayoutExpense.addWidget(self.btnAddExpense)
 
+        self.btnUpdateExpense = QPushButton(self.tabExpenses)
+        self.btnUpdateExpense.setObjectName(u"btnUpdateExpense")
+
+        self.horizontalLayoutExpense.addWidget(self.btnUpdateExpense)
+
         self.btnDeleteExpense = QPushButton(self.tabExpenses)
         self.btnDeleteExpense.setObjectName(u"btnDeleteExpense")
 
@@ -358,16 +368,6 @@ class Ui_MainWindow(object):
 
         self.horizontalLayoutInputObligation.addWidget(self.lineEditObligationPaidAmount)
 
-        self.btnAddObligation = QPushButton(self.tabObligations)
-        self.btnAddObligation.setObjectName(u"btnAddObligation")
-
-        self.horizontalLayoutInputObligation.addWidget(self.btnAddObligation)
-
-        self.btnDeleteObligation = QPushButton(self.tabObligations)
-        self.btnDeleteObligation.setObjectName(u"btnDeleteObligation")
-
-        self.horizontalLayoutInputObligation.addWidget(self.btnDeleteObligation)
-
 
         self.verticalLayout_9.addLayout(self.horizontalLayoutInputObligation)
 
@@ -376,10 +376,32 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_9.addLayout(self.verticalLayout_10)
 
-        self.lineEditObligationDesc = QLineEdit(self.tabObligations)
+        self.horizontalWidget = QWidget(self.tabObligations)
+        self.horizontalWidget.setObjectName(u"horizontalWidget")
+        self.horizontalLayout = QHBoxLayout(self.horizontalWidget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.lineEditObligationDesc = QLineEdit(self.horizontalWidget)
         self.lineEditObligationDesc.setObjectName(u"lineEditObligationDesc")
 
-        self.verticalLayout_9.addWidget(self.lineEditObligationDesc)
+        self.horizontalLayout.addWidget(self.lineEditObligationDesc)
+
+        self.btnAddObligation = QPushButton(self.horizontalWidget)
+        self.btnAddObligation.setObjectName(u"btnAddObligation")
+
+        self.horizontalLayout.addWidget(self.btnAddObligation)
+
+        self.btnUpdateObligation = QPushButton(self.horizontalWidget)
+        self.btnUpdateObligation.setObjectName(u"btnUpdateObligation")
+
+        self.horizontalLayout.addWidget(self.btnUpdateObligation)
+
+        self.btnDeleteObligation = QPushButton(self.horizontalWidget)
+        self.btnDeleteObligation.setObjectName(u"btnDeleteObligation")
+
+        self.horizontalLayout.addWidget(self.btnDeleteObligation)
+
+
+        self.verticalLayout_9.addWidget(self.horizontalWidget)
 
         self.tableObligations = QTableWidget(self.tabObligations)
         if (self.tableObligations.columnCount() < 5):
@@ -412,7 +434,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -455,6 +477,7 @@ class Ui_MainWindow(object):
         self.lineEditIncomeDate.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0414\u0430\u0442\u0430 01.01.2025", None))
         self.lineEditIncomeDesc.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435", None))
         self.btnAddIncome.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0434\u043e\u0445\u043e\u0434", None))
+        self.btnUpdateIncome.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c", None))
         self.btnDeleteIncome.setText(QCoreApplication.translate("MainWindow", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
         ___qtablewidgetitem4 = self.tableIncomes.horizontalHeaderItem(0)
         ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"\u0414\u0430\u0442\u0430", None))
@@ -473,6 +496,7 @@ class Ui_MainWindow(object):
         self.lineEditExpenseDate.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0414\u0430\u0442\u0430 01.01.2025", None))
         self.lineEditExpenseDesc.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435", None))
         self.btnAddExpense.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0440\u0430\u0441\u0445\u043e\u0434", None))
+        self.btnUpdateExpense.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c", None))
         self.btnDeleteExpense.setText(QCoreApplication.translate("MainWindow", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
         ___qtablewidgetitem8 = self.tableExpenses.horizontalHeaderItem(0)
         ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"\u0414\u0430\u0442\u0430", None))
@@ -489,9 +513,10 @@ class Ui_MainWindow(object):
         self.lineEditObligationStartDate.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0414\u0430\u0442\u0430 \u043d\u0430\u0447\u0430\u043b\u0430", None))
         self.lineEditObligationDueDate.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0414\u0430\u0442\u0430 \u043e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u044f", None))
         self.lineEditObligationPaidAmount.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0423\u043f\u043b\u0430\u0447\u0435\u043d\u043d\u0430\u044f \u0441\u0443\u043c\u043c\u0430", None))
-        self.btnAddObligation.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c", None))
-        self.btnDeleteObligation.setText(QCoreApplication.translate("MainWindow", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
         self.lineEditObligationDesc.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435", None))
+        self.btnAddObligation.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c", None))
+        self.btnUpdateObligation.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c", None))
+        self.btnDeleteObligation.setText(QCoreApplication.translate("MainWindow", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
         ___qtablewidgetitem12 = self.tableObligations.horizontalHeaderItem(0)
         ___qtablewidgetitem12.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435", None))
         ___qtablewidgetitem13 = self.tableObligations.horizontalHeaderItem(1)

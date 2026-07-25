@@ -108,6 +108,16 @@ class SqliteFinanceRepository:
             expense.updated_at.isoformat()
         )
 
+    def _expense_to_update_tuple(self, expense: Expense) -> tuple:
+        return (
+            expense.amount,
+            expense.type.value,
+            expense.description,
+            expense.date.isoformat(),
+            expense.updated_at.isoformat(),
+            expense.id
+        )
+
     def _income_to_tuple(self, income: Income) -> tuple:
         return(
             income.amount,
@@ -116,6 +126,16 @@ class SqliteFinanceRepository:
             income.date.isoformat(),
             income.created_at.isoformat(),
             income.updated_at.isoformat()
+        )
+
+    def _income_to_update_tuple(self, income: Income) -> tuple:
+        return(
+            income.amount,
+            income.type.value,
+            income.description,
+            income.date.isoformat(),
+            income.updated_at.isoformat(),
+            income.id
         )
 
     def _obligation_to_tuple(self, obligation: Obligation):
@@ -131,6 +151,21 @@ class SqliteFinanceRepository:
             obligation.created_at.isoformat(),
             obligation.updated_at.isoformat()
         )
+
+    def _obligation_to_update_tuple(self, obligation: Obligation):
+        return (
+            obligation.name,
+            obligation.type.value,
+            obligation.amount,
+            obligation.due_date.isoformat(),
+            obligation.start_date.isoformat(),
+            obligation.monthly_payment,
+            obligation.paid_amount,
+            obligation.description,
+            obligation.updated_at.isoformat(),
+            obligation.id
+        )
+
 
 #   Методы CRUD
 
@@ -179,8 +214,8 @@ class SqliteFinanceRepository:
     def update_income(self, income: Income) -> None:
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
-                "UPDATE income SET amount=?, type=?, description=?, date=?, created_at=?, updated_at=? WHERE id=?",
-                self._income_to_tuple(income)
+                "UPDATE income SET amount=?, type=?, description=?, date=?, updated_at=? WHERE id=?",
+                self._income_to_update_tuple(income)
             )
 
 # DELETE
@@ -238,9 +273,8 @@ class SqliteFinanceRepository:
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
                 "UPDATE expense SET amount=?, type=?, description=?, date=?, updated_at=? WHERE id=?",
-                self._expense_to_tuple(expense)
+                self._expense_to_update_tuple(expense)
             )
-
 
 # DELETE
 
@@ -282,8 +316,8 @@ class SqliteFinanceRepository:
     def update_obligation(self, obligation: Obligation) -> None:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
-                "UPDATE obligation SET name=?, type=?, amount=?, due_date=?, start_date=?, monthly_payment=?, paid_amount=?, description=?, created_at=?, updated_at=? WHERE id = ?",
-                self._obligation_to_tuple(obligation)
+                "UPDATE obligation SET name=?, type=?, amount=?, due_date=?, start_date=?, monthly_payment=?, paid_amount=?, description=?, updated_at=? WHERE id = ?",
+                self._obligation_to_update_tuple(obligation)
             )
 
 # DELETE
