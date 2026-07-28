@@ -2,35 +2,36 @@ import os
 from datetime import datetime
 from typing import List
 from PySide6.QtCore import QObject, Signal, Qt
-from PySide6.QtWidgets import QTableWidgetItem, QApplication, QSystemTrayIcon, QDialog
+from PySide6.QtWidgets import QTableWidgetItem, QApplication, QSystemTrayIcon
 from Models import Expense, Income, Obligation
 from Models.enums import ExpenseType, IncomeType, ObligationType
 from Services.Interfaces.IDialogService import IDialogService
 from Services.Interfaces.IFinanceService import IFinanceService
 from Services.tray_service import TrayService
+from Services.filter_service import FilterService
 
 class MainViewModel(QObject):
     error_occurred = Signal(str)
 
-    def __init__(self, service: IFinanceService, tray_service: TrayService, dialog_service: IDialogService):
+    def __init__(self, service: IFinanceService, tray_service: TrayService, dialog_service: IDialogService, filter_service: FilterService):
         super().__init__()
         self._service = service
         self._tray_service = tray_service
         self._dialog = dialog_service
+        self._filter_service = filter_service
+
         self._ui = None
         self._window = None
-
-        self._current_income_month = datetime.now().month
-        self._current_income_year = datetime.now().year
-        self._current_expense_month = datetime.now().month
-        self._current_expense_year = datetime.now().year
-
         self._expenses: List[Expense] = []
         self._incomes: List[Income] = []
         self._obligations: List[Obligation] = []
         self._balance: float = 0.0
 
-    #  UI
+        self._filtered_expenses: List[Expense] = []
+        self._filtered_incomes: List[Income] = []
+        self._filtered_obligations: List[Obligation] = []
+
+    # UI
     def set_ui(self, ui) -> None:
         self._ui = ui
         self._setup_ui()
@@ -76,18 +77,32 @@ class MainViewModel(QObject):
     def balance(self) -> float:
         return self._balance
 
-    #  Connect buttons
+# Buttons connections
     def _connect_buttons(self) -> None:
         self._ui.btnAddIncome.clicked.connect(self.add_income)
         self._ui.btnAddExpense.clicked.connect(self.add_expense)
         self._ui.btnAddObligation.clicked.connect(self.add_obligation)
-        self._ui.btnUpdateExpense.clicked.connect(self.update_expense)
-        self._ui.btnUpdateIncome.clicked.connect(self.update_income)
-        self._ui.btnUpdateObligation.clicked.connect(self.update_obligation)
+        self._ui.btnUpdateExpense.clicked.connect(self.edit_expense)
+        self._ui.btnUpdateIncome.clicked.connect(self.edit_income)
+        self._ui.btnUpdateObligation.clicked.connect(self.edit_obligation)
         self._ui.btnDeleteExpense.clicked.connect(self.delete_expense)
         self._ui.btnDeleteIncome.clicked.connect(self.delete_income)
         self._ui.btnDeleteObligation.clicked.connect(self.delete_obligation)
 
+    def _connect_navigation_buttons(self) -> None:
+        self._ui.btnIncomePrevMonth.clicked.connect(lambda: self._change_month("income", -1))
+        self._ui.btnIncomeNextMonth.clicked.connect(lambda: self._change_month("income", 1))
+        self._ui.btnExpensePrevMonth.clicked.connect(lambda: self._change_month("expense", -1))
+        self._ui.btnExpenseNextMonth.clicked.connect(lambda: self._change_month("expense", 1))
+
+    def _change_month(self, type: str, delta: int) -> None:
+        if type == "income":
+            self._filter_service.change_income_month(delta)
+        elif type == "expense":
+            self._filter_service.change_expense_month(delta)
+        self._update_all_ui()
+
+    # Data loading and UI update
     def get_all(self) -> None:
         self._expenses = self._service.get_expense()
         self._incomes = self._service.get_income()
@@ -99,85 +114,32 @@ class MainViewModel(QObject):
         self._update_filtered_tables()
         self._update_balance_label()
         self.update_tableMonthStatistic()
-
-    # Таблицы с месяцами
-    def _connect_navigation_buttons(self) -> None:
-        self._ui.btnIncomePrevMonth.clicked.connect(lambda: self._change_month("income", -1))
-        self._ui.btnIncomeNextMonth.clicked.connect(lambda: self._change_month("income", 1))
-        self._ui.btnExpensePrevMonth.clicked.connect(lambda: self._change_month("expense", -1))
-        self._ui.btnExpenseNextMonth.clicked.connect(lambda: self._change_month("expense", 1))
-
-    def _change_month(self, type: str, delta: int) -> None:
-        if type == "income":
-            new_month = self._current_income_month + delta
-            new_year = self._current_income_year
-            if new_month > 12:
-                new_month = 1
-                new_year += 1
-            elif new_month < 1:
-                new_month = 12
-                new_year -= 1
-            self._current_income_month = new_month
-            self._current_income_year = new_year
-            self._update_month_label("income")
-            self._update_filtered_tables()
-        elif type == "expense":
-            new_month = self._current_expense_month + delta
-            new_year = self._current_expense_year
-            if new_month > 12:
-                new_month = 1
-                new_year += 1
-            elif new_month < 1:
-                new_month = 12
-                new_year -= 1
-            self._current_expense_month = new_month
-            self._current_expense_year = new_year
-            self._update_month_label("expense")
-            self._update_filtered_tables()
-
-    def _update_month_label(self, type: str) -> None:
-        if type == "income":
-            date_obj = datetime(self._current_income_year, self._current_income_month, 1)
-            self._ui.labelIncomeCurrentMonth.setText(date_obj.strftime("%B %Y"))
-        elif type == "expense":
-            date_obj = datetime(self._current_expense_year, self._current_expense_month, 1)
-            self._ui.labelExpenseCurrentMonth.setText(date_obj.strftime("%B %Y"))
+        self._update_month_label("income")
+        self._update_month_label("expense")
 
     def _update_filtered_tables(self) -> None:
-        self._update_table_with_filter(
-            self._ui.tableIncomes,
-            self._incomes,
-            self._income_to_row,
-            self._current_income_month,
-            self._current_income_year
-        )
-        self._update_table_with_filter(
-            self._ui.tableExpenses,
-            self._expenses,
-            self._expense_to_row,
-            self._current_expense_month,
-            self._current_expense_year
-        )
-        self._update_table(
-            self._ui.tableObligations,
-            self._obligations,
-            self._obligation_to_row
-        )
+        self._filtered_incomes = self._filter_service.filter_incomes(self._incomes)
+        self._filtered_expenses = self._filter_service.filter_expenses(self._expenses)
+        self._filtered_obligations = self._obligations  # без фильтрации
 
-    def _update_table_with_filter(self, table, data, row_mapper, month, year) -> None:
-        filtered_data = [
-            item for item in data
-            if item.date.month == month and item.date.year == year
-        ]
-        self._update_table(table, filtered_data, row_mapper)
+        self._update_table(self._ui.tableIncomes, self._filtered_incomes, self._income_to_row)
+        self._update_table(self._ui.tableExpenses, self._filtered_expenses, self._expense_to_row)
+        self._update_table(self._ui.tableObligations, self._filtered_obligations, self._obligation_to_row)
 
     def _update_table(self, table, data, row_mapper) -> None:
         table.setRowCount(len(data))
         for row, item in enumerate(data):
             for col, value in enumerate(row_mapper(item)):
                 table.setItem(row, col, value)
+        table.clearSelection()
 
-    # Row mappers
+    def _update_month_label(self, type: str) -> None:
+        if type == "income":
+            self._ui.labelIncomeCurrentMonth.setText(self._filter_service.get_income_month_label())
+        elif type == "expense":
+            self._ui.labelExpenseCurrentMonth.setText(self._filter_service.get_expense_month_label())
+
+# Row mappers
     @staticmethod
     def _expense_to_row(expense: Expense) -> List[QTableWidgetItem]:
         return [
@@ -205,6 +167,7 @@ class MainViewModel(QObject):
             MainViewModel._create_amount_item(obligation.amount),
             MainViewModel._create_amount_item(remaining),
             QTableWidgetItem(obligation.due_date.strftime("%d.%m.%Y")),
+            QTableWidgetItem(obligation.description),
         ]
 
     @staticmethod
@@ -215,36 +178,37 @@ class MainViewModel(QObject):
 
     # Balance
     def _update_balance_label(self) -> None:
-        self._ui.label_balance_value.setText(f"{self._balance:,.2f} ₽")
-        total_expenses = sum(e.amount for e in self._expenses)
-        total_incomes = sum(i.amount for i in self._incomes)
+        now = datetime.now()
+        this_year = now.year
+        this_month = now.month
+
+        this_month_expenses = [e for e in self._expenses if e.date.month == this_month and e.date.year == this_year]
+        this_month_incomes = [i for i in self._incomes if i.date.month == this_month and i.date.year == this_year]
+
+        total_expenses = sum(e.amount for e in this_month_expenses)
+        total_incomes = sum(i.amount for i in this_month_incomes)
         total_obligations = sum(o.amount - o.paid_amount for o in self._obligations)
 
+        self._balance = total_incomes - total_expenses
+
+        self._ui.label_balance_value.setText(f"{self._balance:,.2f} ₽")
         self._ui.label_expenses_value.setText(f"{total_expenses:,.2f} ₽")
         self._ui.label_incomes_value.setText(f"{total_incomes:,.2f} ₽")
         self._ui.label_obligations_value.setText(f"{total_obligations:,.2f} ₽")
 
-    # Statistics
+# Statistics
     def update_tableMonthStatistic(self) -> None:
         month_data = {}
         for income in self._incomes:
             key = income.date.strftime("%Y-%m")
             if key not in month_data:
-                month_data[key] = {
-                    "income": 0.0,
-                    "expense": 0.0,
-                    "month_data": income.date.strftime("%B %Y")
-                }
+                month_data[key] = {"income": 0.0, "expense": 0.0, "month_data": income.date.strftime("%B %Y")}
             month_data[key]["income"] += income.amount
 
         for expense in self._expenses:
             key = expense.date.strftime("%Y-%m")
             if key not in month_data:
-                month_data[key] = {
-                    "income": 0.0,
-                    "expense": 0.0,
-                    "month_data": expense.date.strftime("%B %Y")
-                }
+                month_data[key] = {"income": 0.0, "expense": 0.0, "month_data": expense.date.strftime("%B %Y")}
             month_data[key]["expense"] += expense.amount
 
         sorted_months = sorted(month_data.keys())
@@ -262,8 +226,7 @@ class MainViewModel(QObject):
             field.clear()
         self.get_all()
 
-# CRUD
-    # Create
+#  CRUD
     def add_income(self) -> None:
         try:
             amount = float(self._ui.lineEditIncomeAmount.text())
@@ -307,7 +270,6 @@ class MainViewModel(QObject):
                 monthly_payment=monthly_payment, paid_amount=paid_amount,
                 description=description
             )
-
             self._clear_and_reload(
                 self._ui.lineEditObligationName,
                 self._ui.lineEditObligationAmount,
@@ -320,13 +282,12 @@ class MainViewModel(QObject):
         except ValueError as e:
             self.error_occurred.emit(str(e))
 
-    # Update
-    def update_income(self):
+    def edit_income(self) -> None:
         row = self._ui.tableIncomes.currentRow()
         if row < 0:
-            self._dialog.show_warning(self._window, "Не выбран обьект")
+            self._dialog.show_warning(self._window, "Не выбран объект")
             return
-        income = self._incomes[row]
+        income = self._filtered_incomes[row]
         updated = self._dialog.edit_income(income, self._window)
         if updated is not None:
             try:
@@ -335,12 +296,12 @@ class MainViewModel(QObject):
             except Exception as e:
                 self._dialog.show_error(self._window, str(e))
 
-    def update_expense(self) -> None:
+    def edit_expense(self) -> None:
         row = self._ui.tableExpenses.currentRow()
         if row < 0:
-            self._dialog.show_warning(self._window, "Не выбран строк обьект")
+            self._dialog.show_warning(self._window, "Не выбран объект")
             return
-        expense = self._expenses[row]
+        expense = self._filtered_expenses[row]
         updated = self._dialog.edit_expense(expense, self._window)
         if updated is not None:
             try:
@@ -349,12 +310,12 @@ class MainViewModel(QObject):
             except Exception as e:
                 self._dialog.show_error(self._window, str(e))
 
-    def update_obligation(self):
+    def edit_obligation(self) -> None:
         row = self._ui.tableObligations.currentRow()
         if row < 0:
-            self._dialog.show_warning(self._window, "Не выбран обьект")
+            self._dialog.show_warning(self._window, "Не выбран объект")
             return
-        obligation = self._obligations[row]
+        obligation = self._filtered_obligations[row]
         updated = self._dialog.edit_obligation(obligation, self._window)
         if updated is not None:
             try:
@@ -363,15 +324,14 @@ class MainViewModel(QObject):
             except Exception as e:
                 self._dialog.show_error(self._window, str(e))
 
-    # Delete
     def delete_expense(self) -> None:
-        self._delete_selected(self._ui.tableExpenses, self._expenses, self._service.delete_expense)
+        self._delete_selected(self._ui.tableExpenses, self._filtered_expenses, self._service.delete_expense)
 
     def delete_income(self) -> None:
-        self._delete_selected(self._ui.tableIncomes, self._incomes, self._service.delete_income)
+        self._delete_selected(self._ui.tableIncomes, self._filtered_incomes, self._service.delete_income)
 
     def delete_obligation(self) -> None:
-        self._delete_selected(self._ui.tableObligations, self._obligations, self._service.delete_obligation)
+        self._delete_selected(self._ui.tableObligations, self._filtered_obligations, self._service.delete_obligation)
 
     def _delete_selected(self, table, data, delete_func) -> None:
         row = table.currentRow()
@@ -380,8 +340,7 @@ class MainViewModel(QObject):
             delete_func(item_id)
             self.get_all()
 
-
-    # tray
+#  Tray
     def show_window(self) -> None:
         if self._window:
             self._window.show()
@@ -407,7 +366,3 @@ class MainViewModel(QObject):
         event.ignore()
         if self._window:
             self._window.hide()
-        self._tray_service.show_message(
-            "FIBER Financial Manager",
-            "Приложение свёрнуто"
-        )

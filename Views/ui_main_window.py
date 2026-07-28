@@ -27,9 +27,10 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1059, 750)
-        icon = QIcon()
-        icon.addFile(u"Resources/FIBERFMico.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        MainWindow.setWindowIcon(icon)
+        font = QFont()
+        font.setFamilies([u"Times New Roman"])
+        MainWindow.setFont(font)
+        MainWindow.setIconSize(QSize(24, 24))
         self.actionExit = QAction(MainWindow)
         self.actionExit.setObjectName(u"actionExit")
         self.actionAbout = QAction(MainWindow)
@@ -42,8 +43,6 @@ class Ui_MainWindow(object):
         self.verticalLayout.setContentsMargins(15, 15, 15, 15)
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
-        font = QFont()
-        font.setFamilies([u"Times New Roman"])
         self.tabWidget.setFont(font)
         self.tabDashboard = QWidget()
         self.tabDashboard.setObjectName(u"tabDashboard")
@@ -404,8 +403,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_9.addWidget(self.horizontalWidget)
 
         self.tableObligations = QTableWidget(self.tabObligations)
-        if (self.tableObligations.columnCount() < 5):
-            self.tableObligations.setColumnCount(5)
+        if (self.tableObligations.columnCount() < 6):
+            self.tableObligations.setColumnCount(6)
         __qtablewidgetitem12 = QTableWidgetItem()
         self.tableObligations.setHorizontalHeaderItem(0, __qtablewidgetitem12)
         __qtablewidgetitem13 = QTableWidgetItem()
@@ -416,6 +415,8 @@ class Ui_MainWindow(object):
         self.tableObligations.setHorizontalHeaderItem(3, __qtablewidgetitem15)
         __qtablewidgetitem16 = QTableWidgetItem()
         self.tableObligations.setHorizontalHeaderItem(4, __qtablewidgetitem16)
+        __qtablewidgetitem17 = QTableWidgetItem()
+        self.tableObligations.setHorizontalHeaderItem(5, __qtablewidgetitem17)
         self.tableObligations.setObjectName(u"tableObligations")
         self.tableObligations.setAlternatingRowColors(True)
         self.tableObligations.horizontalHeader().setVisible(True)
@@ -434,7 +435,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -527,6 +528,8 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem15.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0441\u0442\u0430\u0442\u043e\u043a", None))
         ___qtablewidgetitem16 = self.tableObligations.horizontalHeaderItem(4)
         ___qtablewidgetitem16.setText(QCoreApplication.translate("MainWindow", u"\u0421\u0440\u043e\u043a", None))
+        ___qtablewidgetitem17 = self.tableObligations.horizontalHeaderItem(5)
+        ___qtablewidgetitem17.setText(QCoreApplication.translate("MainWindow", u"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabObligations), QCoreApplication.translate("MainWindow", u"\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u0441\u0442\u0432\u0430", None))
     # retranslateUi
 

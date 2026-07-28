@@ -13,7 +13,6 @@ class TrayService:
         return cls._instance
 
     def setup_tray(self, window, view_model, icon_path: str) -> None:
-        """Инициализирует иконку"""
         if TrayService._tray_icon is not None:
             return
 
@@ -48,12 +47,6 @@ class TrayService:
         self._tray_icon.show()
 
     def hide_tray(self) -> None:
-        """Скрывает иконку"""
         if self._tray_icon:
             self._tray_icon.hide()
             self._tray_icon = None
-
-    def show_message(self, title: str, msg: str, icon=QSystemTrayIcon.Information, msecs: int = 2000) -> None:
-        """Показывает всплывающее сообщение."""
-        if self._tray_icon:
-            self._tray_icon.showMessage(title, msg, icon, msecs)
