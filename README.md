@@ -2,7 +2,7 @@
 Приложение FIBER Financial Manager - это десктопное приложение для управления личными финансами, разработанное на Python с использованием PySide6.  
 Приложение помогает отслеживать доходы, расходы, обязательства и предоставляет визуальную статистику  
 
-![](C:\Users\ПК\Desktop\PyFIBERFinancialManager\Resources\FIBERFMico.png)       
+![](https://github.com/DmProkofiev/PyFinancialManager/blob/main/Resources/FIBERFMico.png)       
 
 Архитектурный Паттерн: MVVM  
 Библиотеки: PySide, PyTest, dependency-injector  
